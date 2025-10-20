@@ -1,0 +1,123 @@
+# --- 데이터 경로 설정 ---
+# 프로젝트 전반에서 사용되는 데이터 및 모델 저장 경로를 정의합니다.
+data_paths:
+  raw_dir: 'data/Raw'          # 원본 데이터 디렉터리
+  processed_dir: 'data/Processed' # 정규화 등 전처리된 데이터 디렉터리
+  results_dir: 'results'      # 예측 결과가 저장될 디렉터리
+  h5_dir: 'data'               # H5 포맷으로 변환된 학습 데이터 디렉터리
+  model_dir: 'models'          # 학습된 모델이 저장될 디렉터리
+
+COCO_KEYPOINTS: [
+    "nose", "left_eye", "right_eye", "left_ear", "right_ear",
+    "left_shoulder", "right_shoulder", "left_elbow", "right_elbow",
+    "left_wrist", "right_wrist", "left_hip", "right_hip",
+    "left_knee", "right_knee", "left_ankle", "right_ankle"
+]
+
+# --- 모델별 하이퍼파라미터 설정 ---
+models:
+  # Model 1: 상태 분류를 위한 경량 Transformer 모델 (기존 모델)
+  model1:
+    name: 'State_Classifier'
+    # 데이터 처리 파라미터
+    data:
+      keypoint_indices: [5, 6, 11, 12, 13, 14] # 사용할 관절 인덱스 (어깨, 엉덩이, 무릎)
+      seq_length: 30                          # 시퀀스 길이 (1초 분량의 30Hz 데이터)
+    # 모델 구조 하이퍼파라미터
+    architecture:
+      num_classes: 3          # 분류할 클래스 수 (stand, sit, lying)
+      d_model: 64             # Transformer 모델의 주요 차원 (임베딩 크기)
+      n_head: 4               # 어텐션 헤드 수
+      num_layers: 2           # 인코더 레이어 수
+      ffn_dim: 128            # 피드포워드 네트워크의 은닉층 크기
+    # 학습 파라미터
+    training:
+      batch_size: 32
+      num_epochs: 20
+      learning_rate: 0.001
+  # 테스트 수행  
+  model1_v2:
+    name: 'State_Classifier'
+    # 데이터 처리 파라미터
+    data:
+      keypoint_indices: [5, 6, 11, 12, 13, 14] # 사용할 관절 인덱스 (어깨, 엉덩이, 무릎)
+      seq_length: 30                          # 시퀀스 길이 (1초 분량의 30Hz 데이터)
+    # 모델 구조 하이퍼파라미터
+    architecture:
+      num_classes: 3          # 분류할 클래스 수 (stand, sit, lying)
+      d_model: 64             # Transformer 모델의 주요 차원 (임베딩 크기)
+      n_head: 4               # 어텐션 헤드 수
+      num_layers: 2           # 인코더 레이어 수
+      ffn_dim: 128            # 피드포워드 네트워크의 은닉층 크기
+    # 학습 파라미터
+    training:
+      batch_size: 32
+      num_epochs: 20
+      learning_rate: 0.001
+
+    ### 하단은 현재 미구현
+  # Model 2: (미구현) 다른 목적을 위한 모델 예시
+  model2-1:
+    name: 'Model_2-stand'
+    data:
+      keypoint_indices: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # 예시: 머리를 제외한 모든 인덱스
+      seq_length: 1           # 예시: 지금 시점
+    architecture:
+      num_classes: 5          # 예시: 5개 동작 분류
+      d_model: 128
+      n_head: 8
+      num_layers: 4
+      ffn_dim: 256
+    training:
+      batch_size: 16
+      num_epochs: 50
+      learning_rate: 0.0005
+
+  model2-2:
+    name: 'Model_2-sit'
+    data:
+      keypoint_indices: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # 예시: 머리를 제외한 모든 인덱스
+      seq_length: 1           # 예시: 지금 시점
+    architecture:
+      num_classes: 5          # 예시: 5개 동작 분류
+      d_model: 128
+      n_head: 8
+      num_layers: 4
+      ffn_dim: 256
+    training:
+      batch_size: 16
+      num_epochs: 50
+      learning_rate: 0.0005
+  
+  model2-3:
+    name: 'Model_2-lying'
+    data:
+      keypoint_indices: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # 예시: 머리를 제외한 모든 인덱스
+      seq_length: 1           # 예시: 지금 시점
+    architecture:
+      num_classes: 5          # 예시: 5개 동작 분류
+      d_model: 128
+      n_head: 8
+      num_layers: 4
+      ffn_dim: 256
+    training:
+      batch_size: 16
+      num_epochs: 50
+      learning_rate: 0.0005
+  
+# Model 3: (미구현) 또 다른 목적을 위한 모델 예시
+  model3:
+    name: 'Future_Model_3'
+    data:
+      keypoint_indices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] # 전체 사용
+      seq_length: 30          # 예시: 1초 분량의 30Hz 데이터
+    architecture:
+      num_classes: 2          # 예시: 2개 상태 분류
+      d_model: 32
+      n_head: 2
+      num_layers: 1
+      ffn_dim: 64
+    training:
+      batch_size: 64
+      num_epochs: 15
+      learning_rate: 0.002

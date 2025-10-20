@@ -1,0 +1,2 @@
+from script.classification_state_ver import v2 as run_state_classification_training_v2
+from script.classification_state_ver import v1 as run_state_classification_training

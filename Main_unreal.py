@@ -1,0 +1,1 @@
+run_batch_normalization(raw_dir=RAW_DATA_DIR, processed_dir=PROCESSED_DATA_DIR)
